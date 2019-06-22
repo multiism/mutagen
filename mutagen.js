@@ -892,10 +892,12 @@ async function mutate_code_on_page() {
 			return;
 		}
 	}
-	console.log("mutation finished - unsuccessful");
+	console.log("mutation unsuccessful");
 	stopped = true;
+	// TODO: reset code to original
 }
 
+// TODO: DRY
 async function breed(doc_a, doc_b, chance_of_doc_b) {
 	
 	try {
@@ -904,18 +906,42 @@ async function breed(doc_a, doc_b, chance_of_doc_b) {
 
 	var original_code = get_code_from_page();
 
-	var edits_to_try = generate_edits_by_breeding(doc_a, doc_b, chance_of_doc_b);
-
-	var error = await try_edits(doc_a, edits_to_try);
-	// console.log("tried", edits_to_try, "got", error);
-	if (!error) {
-		console.log("breeding success:");
-		record_thumbnail();
-	} else {
-		alert("breed doesn't look good - rolling back code");
+	var stopped = false;
+	window.mutagen_stop = ()=> {
+		if (stopped) {
+			return;
+		}
+		stopped = true;
+		console.log("abort - reset to original code");
 		set_code_on_page(original_code);
 		compile_code_on_page();
+	};
+
+	var max_edit_set_tries = 150;
+	for (var edit_set_tries = 0; edit_set_tries < max_edit_set_tries; edit_set_tries++) {
+		var edits_to_try = generate_edits_by_breeding(doc_a, doc_b, chance_of_doc_b);
+
+		if (stopped) {
+			console.log("abort from breed");
+			return;
+		}
+
+		var error = await try_edits(doc_a, edits_to_try);
+		// console.log("tried", edits_to_try, "got", error);
+		if (!error) {
+			stopped = true;
+			console.log("breeding success");
+			record_thumbnail();
+			return;
+		} else {
+			set_code_on_page(original_code);
+			compile_code_on_page();
+		}
 	}
+	console.log("breeding unsuccessful");
+	alert("breeding unsuccessful");
+	stopped = true;
+	// TODO: reset code to original
 }
 
 function add_buttons_to_page() {
