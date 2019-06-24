@@ -786,17 +786,29 @@ async function mutate_code_on_page() {
 		window.mutagen_stop();
 	} catch(e) {}
 
+	mutate_button.disabled = true;
+	abort_button.disabled = false;
+
 	var original_code = get_code_from_page();
 
 	var stopped = false;
+	var roll_back_code = ()=> {
+		console.log("reset to original code");
+		set_code_on_page(original_code);
+		compile_code_on_page();
+	};
+	var stop = ()=> {
+		stopped = true;
+		abort_button.disabled = true;
+		setTimeout(()=> { mutate_button.disabled = false; }, 200);
+	};
 	window.mutagen_stop = ()=> {
 		if (stopped) {
 			return;
 		}
-		stopped = true;
-		console.log("abort - reset to original code");
-		set_code_on_page(original_code);
-		compile_code_on_page();
+		console.log("abort");
+		stop();
+		roll_back_code();
 	};
 
 	var doc = parse_for_edit_points(original_code);
@@ -899,22 +911,33 @@ async function mutate_code_on_page() {
 
 // TODO: DRY
 async function breed(doc_a, doc_b, chance_of_doc_b) {
-	
 	try {
 		window.mutagen_stop();
 	} catch(e) {}
 
+	mutate_button.disabled = true;
+	abort_button.disabled = false;
+
 	var original_code = get_code_from_page();
 
 	var stopped = false;
+	var roll_back_code = ()=> {
+		console.log("reset to original code");
+		set_code_on_page(original_code);
+		compile_code_on_page();
+	};
+	var stop = ()=> {
+		stopped = true;
+		abort_button.disabled = true;
+		setTimeout(()=> { mutate_button.disabled = false; }, 200);
+	};
 	window.mutagen_stop = ()=> {
 		if (stopped) {
 			return;
 		}
-		stopped = true;
-		console.log("abort - reset to original code");
-		set_code_on_page(original_code);
-		compile_code_on_page();
+		console.log("abort");
+		stop();
+		roll_back_code();
 	};
 
 	var max_edit_set_tries = 150;
@@ -944,30 +967,25 @@ async function breed(doc_a, doc_b, chance_of_doc_b) {
 	// TODO: reset code to original
 }
 
+var abort_button, mutate_button;
 function add_buttons_to_page() {
 	var existing_button = document.getElementById("mutate");
 	if (existing_button) { existing_button.remove(); }
 	var existing_button = document.getElementById("mutagen-abort");
 	if (existing_button) { existing_button.remove(); }
 
-	var mutate_button = document.createElement("button");
+	mutate_button = document.createElement("button");
 	mutate_button.id = "mutate";
 	mutate_button.textContent = "☢ MUTATE ☢";
 	mutate_button.onclick = async function() {
-		mutate_button.disabled = true;
-		abort_button.disabled = false;
 		await mutate_code_on_page();
-		mutate_button.disabled = false;
-		abort_button.disabled = true;
 	};
 
-	var abort_button = document.createElement("button");
+	abort_button = document.createElement("button");
 	abort_button.id = "mutagen-abort";
 	abort_button.textContent = "ABORT";
 	abort_button.onclick = ()=> {
 		window.mutagen_stop();
-		abort_button.disabled = true;
-		setTimeout(()=> { mutate_button.disabled = false; }, 200);
 	};
 
 	var toolbar = document.querySelector("#toolBar, #toolbar, #tool-bar, #controls") || document.body;
