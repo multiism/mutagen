@@ -945,40 +945,40 @@ async function breed(doc_a, doc_b, chance_of_doc_b) {
 }
 
 function add_buttons_to_page() {
-	var existingButton = document.getElementById("mutate");
-	if (existingButton) { existingButton.remove(); }
-	var existingButton = document.getElementById("mutagen-abort");
-	if (existingButton) { existingButton.remove(); }
+	var existing_button = document.getElementById("mutate");
+	if (existing_button) { existing_button.remove(); }
+	var existing_button = document.getElementById("mutagen-abort");
+	if (existing_button) { existing_button.remove(); }
 
-	var mutateButton = document.createElement("button");
-	mutateButton.id = "mutate";
-	mutateButton.textContent = "☢ MUTATE ☢";
-	mutateButton.onclick = async function() {
-		mutateButton.disabled = true;
-		abortButton.disabled = false;
+	var mutate_button = document.createElement("button");
+	mutate_button.id = "mutate";
+	mutate_button.textContent = "☢ MUTATE ☢";
+	mutate_button.onclick = async function() {
+		mutate_button.disabled = true;
+		abort_button.disabled = false;
 		await mutate_code_on_page();
-		mutateButton.disabled = false;
-		abortButton.disabled = true;
+		mutate_button.disabled = false;
+		abort_button.disabled = true;
 	};
 
-	var abortButton = document.createElement("button");
-	abortButton.id = "mutagen-abort";
-	abortButton.textContent = "ABORT";
-	abortButton.onclick = ()=> {
+	var abort_button = document.createElement("button");
+	abort_button.id = "mutagen-abort";
+	abort_button.textContent = "ABORT";
+	abort_button.onclick = ()=> {
 		window.mutagen_stop();
-		abortButton.disabled = true;
-		setTimeout(()=> { mutateButton.disabled = false; }, 200);
+		abort_button.disabled = true;
+		setTimeout(()=> { mutate_button.disabled = false; }, 200);
 	};
 
 	var toolbar = document.querySelector("#toolBar, #toolbar, #tool-bar, #controls") || document.body;
 	if (location.hostname.match(/ShaderToy/i)) {
 		// let's not bother trying to fit in a layout based around absolute positions
 		// just insert it below the toolbar
-		toolbar.parentElement.insertBefore(abortButton, toolbar.nextSibling);
-		toolbar.parentElement.insertBefore(mutateButton, toolbar.nextSibling);
+		toolbar.parentElement.insertBefore(abort_button, toolbar.nextSibling);
+		toolbar.parentElement.insertBefore(mutate_button, toolbar.nextSibling);
 	} else {
-		toolbar.appendChild(mutateButton);
-		toolbar.appendChild(abortButton);
+		toolbar.appendChild(mutate_button);
+		toolbar.appendChild(abort_button);
 	}
 }
 
