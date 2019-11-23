@@ -1037,12 +1037,16 @@ thumbnail/history/specimen grid/palette:
 	allow sort/arrange by:
 		time created (current order)
 		ancestry (need to store what something was generated from) (and then just flatten the tree)
+			maybe optional tree view vs flattened grid view
+				w/ icons like Ꮬ ⸬
+			https://en.wikipedia.org/wiki/Phylogenetic_tree
 		or t-SNE
 			https://cs.stanford.edu/people/karpathy/tsnejs/
 			(we have these "edit points" to work with, that are currently all numbers)
 			(question: how much does magnitude matter? might it mess things up? would log help? or is that already built in?)
 			(i suppose any edit points that don't have a visible effect would make it worse,
 			but i'm curious how well it might do with just a naive implementation)
+			(MAYBE an option of a flattened grid view, using a one-dimensional t-SNE? or 2D constrained to N columns somehow)
 
 operate on selection if there's a selection (and update bounds of selection)
 	should handle multiple selections for editors like codemirror and ace
@@ -1051,6 +1055,8 @@ platform support
 	support bytebeat again on windows93.net (in iframe)
 	khan academy, including "error buddy" detection
 	code fiddles like jsfiddle, codepen, jsbin, fiddle salad
+	shaderoo.org (ace editor)
+	see "Shadertoy cousins" on https://shadertoyunofficial.wordpress.com/2017/07/25/extending-shadertoy/
 
 wrap values sometimes in a function, like i did for:
 	https://www.khanacademy.org/computer-programming/phantasmagoria/2540238893

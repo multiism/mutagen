@@ -1,0 +1,26 @@
+a list of the possible things you could refer to results/specimens/programs as:
+
+- program
+- document (doc)
+- code
+- specimen
+- species (perhaps...)
+- result (other than first one)
+- item
+- thumbnail (rather refers to the visual representation)
+- shader (if shadertoy / other shader)
+- ingredient
+- amalgamation (only if bred)
+- result (other than first one)
+- offspring (other than first one)
+- genome
+- breed (if bred)
+- progeny (if bred / maybe if mutated)
+
+and for parents:
+- parent  
+- ingredient  
+- input  
+- base  
+- basis (a little weirder)  
+- original (in case of mutation (single parent process))

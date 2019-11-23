@@ -16,6 +16,8 @@ It captures thumbnails of the output, and you can:
 
 Mutagen lets you **create novel works of art by remixing procedural art thru a visual interface.**
 
+<!-- https://en.wikipedia.org/wiki/Selective_breeding -->
+
 ### Try it out
 
 I plan on distributing this as a browser extension, and maybe a bookmarklet (pared down version?), but for now:
@@ -28,7 +30,7 @@ I plan on distributing this as a browser extension, and maybe a bookmarklet (par
 
 ### Criteria for a good candidate for mutation
 
-- As much as possible of the code should be dedicated directly to the visual structure of the output, rather than technical details like implementing a ray tracer. (The ability to mutate only selected areas of code will help with this.)
+- As much as possible of the code should be [dedicated directly to the visual structure of the output](https://www.shadertoy.com/view/XsXGzn), rather than technical details like [implementing a ray tracer](https://www.shadertoy.com/view/lsX3DH). (The ability to mutate only selected areas of code will help with this.)
 - No dramatic scene transitions / camera changes / other dramatic shifts over time, as these can make it hard to understand what's from the mutations and what's part of the original, or just compare specimens (in thumbnails and otherwise)
 - Fast, because it's not so fun when your computer is lagging 😛
 
