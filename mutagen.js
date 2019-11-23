@@ -198,7 +198,7 @@ if (existing_style) {
 }
 var css = `
 #mutagen-thumbnails-container {
-	position: absolute;
+	position: fixed;
 	right: 0;
 	bottom: 0;
 	width: 100%;
