@@ -227,13 +227,13 @@ var css = `
 	padding-top: 15px;
 	padding-bottom: 15px; /* doesn't seem to work - could use margin instead tho if there's an outer container */
 }
-#mutagen-breeding-bar {
+#mutagen-breeding-box {
 	flex-basis: 150px;
 	border: 4px dashed gray;
 	border-radius: 15px;
 	background: rgba(50, 50, 50, 0.9);
 }
-#mutagen-breeding-bar.over {
+#mutagen-breeding-box.over {
 	border-color: #fff;
 }
 #mutagen-thumbnails-container {
@@ -282,10 +282,13 @@ var toolbar = document.createElement("div");
 toolbar.id = "mutagen-toolbar";
 var breeding_bar = document.createElement("div");
 breeding_bar.id = "mutagen-breeding-bar";
-breeding_bar.className = "mutagen-thumbnails-list";
+var breeding_thumbnails_container = document.createElement("div");
+breeding_thumbnails_container.id = "mutagen-breeding-box";
+breeding_thumbnails_container.className = "mutagen-thumbnails-list";
 var thumbnails_container = document.createElement("div");
 thumbnails_container.id = "mutagen-thumbnails-container";
 thumbnails_container.className = "mutagen-thumbnails-list";
+breeding_bar.appendChild(breeding_thumbnails_container);
 ui_container.appendChild(toolbar);
 ui_container.appendChild(breeding_bar);
 ui_container.appendChild(thumbnails_container);
@@ -356,46 +359,31 @@ function record_thumbnail() {
 	});
 }
 
-breeding_bar.addEventListener("dragover", (event)=> {
+breeding_thumbnails_container.addEventListener("dragover", (event)=> {
 	event.preventDefault();
 	return false;
 });
-breeding_bar.addEventListener("dragenter", (event)=> {
+breeding_thumbnails_container.addEventListener("dragenter", (event)=> {
 	if (!dragging_el) {
 		return;
 	}
-	breeding_bar.classList.add("over");
+	breeding_thumbnails_container.classList.add("over");
 });
-breeding_bar.addEventListener("dragleave", (event)=> {
-	if (event.relatedTarget !== breeding_bar) {
+breeding_thumbnails_container.addEventListener("dragleave", (event)=> {
+	if (event.relatedTarget !== breeding_thumbnails_container) {
 		return;
 	}
-	breeding_bar.classList.remove("over");
+	breeding_thumbnails_container.classList.remove("over");
 });
-breeding_bar.addEventListener("drop", (event)=> {
+breeding_thumbnails_container.addEventListener("drop", (event)=> {
 	event.stopPropagation();
 	if (!dragging_el) {
 		return;
 	}
 	var thumbnail_clone = dragging_el.cloneNode();
-	breeding_bar.appendChild(thumbnail_clone);
+	breeding_thumbnails_container.appendChild(thumbnail_clone);
 
-		// // var dragged_code = event.dataTransfer.getData("text/plain");
-		// // var dropped_onto_code = code;
-		// var dragged_doc = parse_for_edit_points(dragged_code);
-		// var dropped_onto_doc = parse_for_edit_points(dropped_onto_code);
-		// if (document_structures_are_equivalent(dragged_doc, dropped_onto_doc)) {
-		// 	breed(dragged_doc, dropped_onto_doc, 0.5);
-		// 	// breed([dragged_doc, dropped_onto_doc], [0.5, 0.5]);
-		// } else {
-		// 	// alert("Specimens do not appear compatible.");
-		// 	if (confirm("Specimens do not appear compatible. Force breeding?")) {
-		// 		alert(choose(["creepy.", "ew.", "gross. gross, that you would try to do that. (haha)"]));
-		// 	}
-		// }
-	
 	return false;
-	
 });
 
 function is_output_canvas_interesting() {
@@ -490,25 +478,32 @@ function generate_edits(doc) {
 	// console.log(`${edits.length} possible edits in ${tries_to_reach_min_edits} tries`);
 	return edits;
 }
-// TODO: breed between arbitrary number of programs, with weighted chances
-function generate_edits_by_breeding(doc_a, doc_b, chance_of_doc_b) {
-	// here we're gonna make edits for every edit point
-	// it doesn't matter because we're not testing and eliminating individual edits
-	// so including "edits" where the docs match isn't gonna slow things down
+// TODO: weighted random chances
+function generate_edits_by_breeding(base_doc, docs, weights) {
+	// make edits for every edit point
+	// It might be good in the future to apply only needed edits in CodeMirror & Ace editors,
+	// but for now it doesn't matter if we create "edits" where the docs actually match.
+
+	// TODO: throw?
+	console.assert(docs.length === weights.length, "number of docs and weights must match");
+	var doc_length = docs[0].length;
+	for(const doc of docs) {
+		console.assert(doc.length === doc_length, "doc lengths should match");
+	}
 	var edits = [];
-	console.assert(doc_a.length === doc_b.length, "doc lengths should match");
-	for (var i=0; i<doc_a.length; i++) {
-		var part_a = doc_a[i];
-		var part_b = doc_b[i];
-		console.assert(part_a.type === part_b.type, "part types should match");
-		if (part_a.type === "number_literal") {
-			var part = Math.random() < chance_of_doc_b ? part_b : part_a;
+	for (var i=0; i<base_doc.length; i++) {
+		var base_part = base_doc[i];
+		var part_options = docs.map((doc)=> doc[i]);
+		for (const part of part_options) {
+			console.assert(part.type === base_part.type, "part types should match");
+		}
+		if (base_part.type === "number_literal") {
+			var part = part_options[Math.floor(Math.random() * part_options.length)];
 			edits.push({
 				index_in_doc: i,
 				text: part.text,
-				_from_part: part, // for debug
-				_doc_a_part: part_a, // for debug
-				_doc_b_part: part_b, // for debug
+				_part_chosen: part, // for debug
+				_part_options: part_options, // for debug
 			});
 		}
 	}
@@ -961,10 +956,17 @@ async function mutate_code_on_page() {
 }
 
 // TODO: DRY
-async function breed(doc_a, doc_b, chance_of_doc_b) {
+async function breed(docs, weights) {
 	try {
 		window.mutagen_stop();
 	} catch(e) {}
+
+	var base_doc = docs[0];
+	if (!base_doc) {
+		console.log("Nothing to breed");
+		return;
+	}
+	// TODO: check that document_structures_are_equivalent
 
 	mutate_button.disabled = true;
 	abort_button.disabled = false;
@@ -993,14 +995,14 @@ async function breed(doc_a, doc_b, chance_of_doc_b) {
 
 	var max_edit_set_tries = 150;
 	for (var edit_set_tries = 0; edit_set_tries < max_edit_set_tries; edit_set_tries++) {
-		var edits_to_try = generate_edits_by_breeding(doc_a, doc_b, chance_of_doc_b);
+		var edits_to_try = generate_edits_by_breeding(base_doc, docs, weights);
 
 		if (stopped) {
 			console.log("abort from breed");
 			return;
 		}
 
-		var error = await try_edits(doc_a, edits_to_try);
+		var error = await try_edits(base_doc, edits_to_try);
 		// console.log("tried", edits_to_try, "got", error);
 		if (!error) {
 			stopped = true;
@@ -1030,6 +1032,16 @@ abort_button.id = "mutagen-abort";
 abort_button.textContent = "ABORT";
 abort_button.onclick = ()=> {
 	window.mutagen_stop();
+};
+
+
+var breed_button = document.createElement("button");
+breed_button.textContent = "Breed";
+breed_button.onclick = ()=> {
+	const selected_thumbnails = Array.from(document.querySelectorAll("#mutagen-breeding-box .mutagen-thumbnail"));
+	const selected_codes = selected_thumbnails.map((thumbnail)=> thumbnail.dataset.code);
+	const selected_docs = selected_codes.map(parse_for_edit_points);
+	breed(selected_docs, selected_docs.map(()=> 1));
 };
 
 var export_button = document.createElement("button");
@@ -1080,6 +1092,7 @@ toolbar.appendChild(mutate_button);
 toolbar.appendChild(abort_button);
 toolbar.appendChild(export_button);
 toolbar.appendChild(export_results);
+breeding_bar.appendChild(breed_button);
 
 try {
 	window.mutagen_stop();
