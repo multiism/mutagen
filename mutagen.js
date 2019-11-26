@@ -986,38 +986,22 @@ async function breed(doc_a, doc_b, chance_of_doc_b) {
 	// TODO: reset code to original
 }
 
-var abort_button, mutate_button;
-function add_buttons_to_page() {
-	var existing_button = document.getElementById("mutate");
-	if (existing_button) { existing_button.remove(); }
-	var existing_button = document.getElementById("mutagen-abort");
-	if (existing_button) { existing_button.remove(); }
+var mutate_button = document.createElement("button");
+mutate_button.id = "mutate";
+mutate_button.textContent = "☢ MUTATE ☢";
+mutate_button.onclick = async function() {
+	await mutate_code_on_page();
+};
 
-	mutate_button = document.createElement("button");
-	mutate_button.id = "mutate";
-	mutate_button.textContent = "☢ MUTATE ☢";
-	mutate_button.onclick = async function() {
-		await mutate_code_on_page();
-	};
+var abort_button = document.createElement("button");
+abort_button.id = "mutagen-abort";
+abort_button.textContent = "ABORT";
+abort_button.onclick = ()=> {
+	window.mutagen_stop();
+};
 
-	abort_button = document.createElement("button");
-	abort_button.id = "mutagen-abort";
-	abort_button.textContent = "ABORT";
-	abort_button.onclick = ()=> {
-		window.mutagen_stop();
-	};
-
-	var toolbar = document.querySelector("#toolBar, #toolbar, #tool-bar, #controls") || document.body;
-	if (location.hostname.match(/ShaderToy/i)) {
-		// let's not bother trying to fit in a layout based around absolute positions
-		// just insert it below the toolbar
-		toolbar.parentElement.insertBefore(abort_button, toolbar.nextSibling);
-		toolbar.parentElement.insertBefore(mutate_button, toolbar.nextSibling);
-	} else {
-		toolbar.appendChild(mutate_button);
-		toolbar.appendChild(abort_button);
-	}
-}
+toolbar.appendChild(mutate_button);
+toolbar.appendChild(abort_button);
 
 try {
 	window.mutagen_stop();
@@ -1040,7 +1024,6 @@ TODO: improve handling of shadertoy tabs:
 Some other things that would be good:
 
 GUI:
-	maybe put the mutate + abort buttons in a container with the specimen palette
 	add some text explaining the double click if that's gonna be a thing
 	a draggable, resizable window to put the GUI in
 	background process cursor while mutating?
