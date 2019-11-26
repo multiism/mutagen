@@ -1009,7 +1009,6 @@ try {
 
 record_thumbnail();
 add_buttons_to_page();
-mutate_code_on_page();
 
 /*
 FIXME: canvas snapshotted and/or tested for blankness before the shader is loaded and rendered
