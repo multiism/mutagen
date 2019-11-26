@@ -361,13 +361,22 @@ breeding_bar.addEventListener("dragover", (event)=> {
 	return false;
 });
 breeding_bar.addEventListener("dragenter", (event)=> {
+	if (!dragging_el) {
+		return;
+	}
 	breeding_bar.classList.add("over");
 });
 breeding_bar.addEventListener("dragleave", (event)=> {
+	if (event.relatedTarget !== breeding_bar) {
+		return;
+	}
 	breeding_bar.classList.remove("over");
 });
 breeding_bar.addEventListener("drop", (event)=> {
 	event.stopPropagation();
+	if (!dragging_el) {
+		return;
+	}
 	var thumbnail_clone = dragging_el.cloneNode();
 	breeding_bar.appendChild(thumbnail_clone);
 
