@@ -227,8 +227,12 @@ var css = `
 	padding-top: 15px;
 	padding-bottom: 15px; /* doesn't seem to work - could use margin instead tho if there's an outer container */
 }
-#mutagen-breeding-box {
+#mutagen-breeding-bar {
+	display: flex;
 	flex-basis: 150px;
+}
+#mutagen-breeding-box {
+	flex: 1;
 	border: 4px dashed gray;
 	border-radius: 15px;
 	background: rgba(50, 50, 50, 0.9);
@@ -494,6 +498,7 @@ function generate_edits_by_breeding(base_doc, docs, weights) {
 	for (var i=0; i<base_doc.length; i++) {
 		var base_part = base_doc[i];
 		var part_options = docs.map((doc)=> doc[i]);
+		// Note: parts can be strings or edit point objects
 		for (const part of part_options) {
 			console.assert(part.type === base_part.type, "part types should match");
 		}
