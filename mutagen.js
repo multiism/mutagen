@@ -734,7 +734,8 @@ randomly mutated with...
 
 ${logo}
 
-(MUTAGEN, pre-alpha code mutation tool by Isaiah Odhner)`;
+https://github.com/multiism/mutagen
+(MUTAGEN, code mutation tool by Isaiah Odhner)`;
 	var line_comment_token = "//";
 	header = header.replace(/(^|\n)/g, `$1${line_comment_token} `).split("\n").map((line)=> line.trimEnd()).join("\n");
 	console.assert(header.indexOf(attribution_header_start) === 0, "attribution_header_start didn't match at start of header");
