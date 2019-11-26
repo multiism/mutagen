@@ -242,6 +242,9 @@ var css = `
 .mutagen-thumbnail.dragging {
 	opacity: 0.4;
 }
+#mutagen-ui-container .export-results {
+	display: inline-block;
+}
 #mutagen-ui-container .download {
 	padding: 15px;
 	display: inline-block;
@@ -1000,15 +1003,60 @@ abort_button.onclick = ()=> {
 	window.mutagen_stop();
 };
 
+var export_button = document.createElement("button");
+export_button.textContent = "Export Code & Thumbnails";
+export_button.onclick = export_thumbnails;
+var export_results = document.createElement("div");
+export_results.className = "export-results";
+
+function export_thumbnails(){
+	export_results.innerHTML = "";
+
+	var thumbnails = Array.from(document.querySelectorAll(".mutagen-thumbnail"));
+	var all_code = thumbnails.map((thumbnail)=> thumbnail.dataset.code).join("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+	var all_code_blob = new Blob([all_code], {type: 'text/plain'});
+	
+	var url = URL.createObjectURL(all_code_blob);
+	var a = document.createElement("a");
+	a.href = url;
+	a.download = "mutagen-thumbnails.glsl.txt";
+	a.className = "download download-code";
+	a.textContent = "download combined code";
+	export_results.appendChild(a);
+	
+	var thumbs_per_row = 5;
+	var canvas = document.createElement("canvas");
+	var ctx = canvas.getContext("2d");
+	canvas.width = thumbnails[0].width * thumbs_per_row;
+	canvas.height = thumbnails[0].height * (Math.ceil(thumbnails.length / thumbs_per_row));
+	for (var i=0; i<thumbnails.length; i++) {
+		ctx.drawImage(
+			thumbnails[i],
+			(i % thumbs_per_row) * thumbnails[0].width,
+			(~~(i / thumbs_per_row)) * thumbnails[0].height
+		);
+	}
+	canvas.toBlob((blob)=> {
+		var url = URL.createObjectURL(blob);
+		var a = document.createElement("a");
+		a.className = "download download-thumbnails";
+		a.href = url;
+		a.download = "mutagen-thumbnails.png";
+		a.textContent = "download combined thumbnails screenshot";
+		export_results.appendChild(a);
+	});	
+}
+
 toolbar.appendChild(mutate_button);
 toolbar.appendChild(abort_button);
+toolbar.appendChild(export_button);
+toolbar.appendChild(export_results);
 
 try {
 	window.mutagen_stop();
 } catch(e) {}
 
 record_thumbnail();
-add_buttons_to_page();
 
 /*
 FIXME: canvas snapshotted and/or tested for blankness before the shader is loaded and rendered
