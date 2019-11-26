@@ -197,7 +197,7 @@ if (existing_style) {
 	existing_style.remove();
 }
 var css = `
-#mutagen-thumbnails-container {
+#mutagen-ui-container {
 	position: fixed;
 	right: 0;
 	bottom: 0;
@@ -209,7 +209,12 @@ var css = `
 	transform-origin: bottom right;
 	transition: transform .2s ease;
 	overflow: auto;
-
+}
+#mutagen-ui-container:hover,
+#mutagen-ui-container:focus-within {
+	transform: scale(1);
+}
+#mutagen-thumbnails-container {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, ${thumbnail_canvas.width}px);
 	grid-gap: 10px;
@@ -218,10 +223,6 @@ var css = `
 	margin: 0 auto;
 	padding-top: 15px;
 	padding-bottom: 15px; /* doesn't seem to work - could use margin instead tho if there's an outer container */
-}
-#mutagen-thumbnails-container:hover,
-#mutagen-thumbnails-container:focus-within {
-	transform: scale(1);
 }
 .mutagen-thumbnail {
 	cursor: pointer;
@@ -247,12 +248,17 @@ style.appendChild(document.createTextNode(css));
 
 var thumbnails = Array.from(document.querySelectorAll(".mutagen-thumbnail"));
 var existing_thumbnails_container = document.querySelector("#mutagen-thumbnails-container"); // history palette / specimen palette
-if (existing_thumbnails_container) {
-	existing_thumbnails_container.remove();
+var existing_ui_container = document.querySelector("#mutagen-ui-container"); // history palette / specimen palette
+
+if (existing_ui_container) {
+	existing_ui_container.remove();
 }
+var ui_container = document.createElement("div");
+ui_container.id = "mutagen-ui-container";
 var thumbnails_container = document.createElement("div");
 thumbnails_container.id = "mutagen-thumbnails-container";
-document.body.appendChild(thumbnails_container);
+ui_container.appendChild(thumbnails_container);
+document.body.appendChild(ui_container);
 for (var thumbnail of thumbnails) {
 	thumbnails_container.appendChild(thumbnail);
 }
