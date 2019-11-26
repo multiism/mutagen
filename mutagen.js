@@ -198,29 +198,33 @@ if (existing_style) {
 }
 var css = `
 #mutagen-ui-container {
+	font-size: 15px;
 	position: fixed;
 	right: 0;
 	bottom: 0;
 	width: 100%;
 	height: 50%;
 	z-index: 10;
+	display: flex;
+	flex-direction: column;
 	background: rgba(0, 0, 0, 0.5);
+	color: white;
 	transform: scale(0.2);
 	transform-origin: bottom right;
 	transition: transform .2s ease;
-	overflow: auto;
 }
 #mutagen-ui-container:hover,
 #mutagen-ui-container:focus-within {
 	transform: scale(1);
 }
 #mutagen-thumbnails-container {
+	flex: 1;
 	display: grid;
+	overflow: auto;
 	grid-template-columns: repeat(auto-fill, ${thumbnail_canvas.width}px);
 	grid-gap: 10px;
 	justify-content: center;
 	align-content: flex-start;
-	margin: 0 auto;
 	padding-top: 15px;
 	padding-bottom: 15px; /* doesn't seem to work - could use margin instead tho if there's an outer container */
 }
@@ -237,6 +241,11 @@ var css = `
 }
 .mutagen-thumbnail.dragging {
 	opacity: 0.4;
+}
+#mutagen-ui-container .download {
+	padding: 15px;
+	display: inline-block;
+	font-size: 1em;
 }
 `;
 var style = document.createElement("style");
@@ -255,8 +264,11 @@ if (existing_ui_container) {
 }
 var ui_container = document.createElement("div");
 ui_container.id = "mutagen-ui-container";
+var toolbar = document.createElement("div");
+toolbar.id = "mutagen-toolbar";
 var thumbnails_container = document.createElement("div");
 thumbnails_container.id = "mutagen-thumbnails-container";
+ui_container.appendChild(toolbar);
 ui_container.appendChild(thumbnails_container);
 document.body.appendChild(ui_container);
 for (var thumbnail of thumbnails) {
