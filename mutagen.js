@@ -217,8 +217,7 @@ var css = `
 #mutagen-ui-container:focus-within {
 	transform: scale(1);
 }
-#mutagen-thumbnails-container {
-	flex: 1;
+.mutagen-thumbnails-list {
 	display: grid;
 	overflow: auto;
 	grid-template-columns: repeat(auto-fill, ${thumbnail_canvas.width}px);
@@ -228,17 +227,29 @@ var css = `
 	padding-top: 15px;
 	padding-bottom: 15px; /* doesn't seem to work - could use margin instead tho if there's an outer container */
 }
+#mutagen-breeding-bar {
+	flex-basis: 150px;
+	border: 4px dashed gray;
+	border-radius: 15px;
+	background: rgba(50, 50, 50, 0.9);
+}
+#mutagen-breeding-bar.over {
+	border-color: #fff;
+}
+#mutagen-thumbnails-container {
+	flex: 1;
+}
 .mutagen-thumbnail {
 	cursor: pointer;
 	vertical-align: top;
 	border: 2px dashed transparent;
 }
-.mutagen-thumbnail.over {
+/*.mutagen-thumbnail.over {
 	border: 2px dashed #fff;
 }
 .mutagen-thumbnail.over:not(.dragging) {
 	box-shadow: 0 0 5px yellow, 0 0 15px lime;
-}
+}*/
 .mutagen-thumbnail.dragging {
 	opacity: 0.4;
 }
@@ -269,9 +280,14 @@ var ui_container = document.createElement("div");
 ui_container.id = "mutagen-ui-container";
 var toolbar = document.createElement("div");
 toolbar.id = "mutagen-toolbar";
+var breeding_bar = document.createElement("div");
+breeding_bar.id = "mutagen-breeding-bar";
+breeding_bar.className = "mutagen-thumbnails-list";
 var thumbnails_container = document.createElement("div");
 thumbnails_container.id = "mutagen-thumbnails-container";
+thumbnails_container.className = "mutagen-thumbnails-list";
 ui_container.appendChild(toolbar);
+ui_container.appendChild(breeding_bar);
 ui_container.appendChild(thumbnails_container);
 document.body.appendChild(ui_container);
 for (var thumbnail of thumbnails) {
@@ -330,35 +346,6 @@ function record_thumbnail() {
 		thumbnail_img.classList.add("dragging");
 		dragging_el = thumbnail_img;
 	});
-	thumbnail_img.addEventListener("dragover", (event)=> {
-		event.preventDefault();
-		return false;
-	});
-	thumbnail_img.addEventListener("dragenter", (event)=> {
-		thumbnail_img.classList.add("over");
-	});
-	thumbnail_img.addEventListener("dragleave", (event)=> {
-		thumbnail_img.classList.remove("over");
-	});
-	thumbnail_img.addEventListener("drop", (event)=> {
-		event.stopPropagation();
-		if (dragging_el !== thumbnail_img) {
-			var dragged_code = event.dataTransfer.getData("text/plain");
-			var dropped_onto_code = code;
-			var dragged_doc = parse_for_edit_points(dragged_code);
-			var dropped_onto_doc = parse_for_edit_points(dropped_onto_code);
-			if (document_structures_are_equivalent(dragged_doc, dropped_onto_doc)) {
-				breed(dragged_doc, dropped_onto_doc, 0.5);
-				// breed([dragged_doc, dropped_onto_doc], [0.5, 0.5]);
-			} else {
-				// alert("Specimens do not appear compatible.");
-				if (confirm("Specimens do not appear compatible. Force breeding?")) {
-					alert(choose(["creepy.", "ew.", "gross. gross, that you would try to do that. (haha)"]));
-				}
-			}
-		}
-		return false;
-	});
 	thumbnail_img.addEventListener("dragend", (event)=> {
 		var thumbnails = Array.from(document.querySelectorAll(".mutagen-thumbnail"));
 		thumbnails.forEach((thumbnail)=> {
@@ -368,6 +355,39 @@ function record_thumbnail() {
 		dragging_el = null; // (drop comes before dragend)
 	});
 }
+
+breeding_bar.addEventListener("dragover", (event)=> {
+	event.preventDefault();
+	return false;
+});
+breeding_bar.addEventListener("dragenter", (event)=> {
+	breeding_bar.classList.add("over");
+});
+breeding_bar.addEventListener("dragleave", (event)=> {
+	breeding_bar.classList.remove("over");
+});
+breeding_bar.addEventListener("drop", (event)=> {
+	event.stopPropagation();
+	var thumbnail_clone = dragging_el.cloneNode();
+	breeding_bar.appendChild(thumbnail_clone);
+
+		// // var dragged_code = event.dataTransfer.getData("text/plain");
+		// // var dropped_onto_code = code;
+		// var dragged_doc = parse_for_edit_points(dragged_code);
+		// var dropped_onto_doc = parse_for_edit_points(dropped_onto_code);
+		// if (document_structures_are_equivalent(dragged_doc, dropped_onto_doc)) {
+		// 	breed(dragged_doc, dropped_onto_doc, 0.5);
+		// 	// breed([dragged_doc, dropped_onto_doc], [0.5, 0.5]);
+		// } else {
+		// 	// alert("Specimens do not appear compatible.");
+		// 	if (confirm("Specimens do not appear compatible. Force breeding?")) {
+		// 		alert(choose(["creepy.", "ew.", "gross. gross, that you would try to do that. (haha)"]));
+		// 	}
+		// }
+	
+	return false;
+	
+});
 
 function is_output_canvas_interesting() {
 	test_ctx.clearRect(0, 0, test_canvas.width, test_canvas.height);
