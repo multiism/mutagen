@@ -2,17 +2,16 @@
 
 There's an incredible breadth of art people have created on websites like [Shadertoy](https://www.shadertoy.com/browse).
 
-You never had to be a programmer to mess around with any of these, just fiddling with random numbers, but sometimes it'll spit a compiler error at you (and you'd have to undo), and besides, manually changing random numbers is tedious.
-
-We can automate this.
+You never had to be a programmer to mess around with any of these, just fiddling with random numbers, but doing that manually is tedious. *We can automate this.*
 
 Mutagen simplifies this process and gives you direct creative control over programs you don't have to understand.
 
 It captures thumbnails of the output, and you can:
 
-- Double click to mutate, creating a new thumbnail. Target ones you like in order to create variations on it, and target ones that retain more of the structure of the output, such as the original.
-- Drag a thumbnail onto another to breed the two together, splicing their genes. This creates a new thumbnail.
-- Single click to go back to any specimen to view it or copy the code
+- Double click on any thumbnail to mutate it, creating a new thumbnail. Target ones you like in order to create variations on it, and target ones that retain more of the structure of the output, such as the original, for more likely coherent results.
+- Single click to view any specimen
+- ~~Drag a thumbnail onto another to breed the two together, splicing their genes. This creates a new thumbnail.~~
+- Drag thumbnails into the breeding box and click Breed to make mixes of the mutations, manifesting as more thumbnails
 
 Mutagen lets you **create novel works of art by remixing procedural art thru a visual interface.**
 
@@ -31,7 +30,7 @@ I plan on distributing this as a browser extension, and maybe a bookmarklet (par
 ### Criteria for a good candidate for mutation
 
 - As much as possible of the code should be [dedicated directly to the visual structure of the output](https://www.shadertoy.com/view/XsXGzn), rather than technical details like [implementing a ray tracer](https://www.shadertoy.com/view/lsX3DH). (The ability to mutate only selected areas of code will help with this.)
-- No dramatic scene transitions / camera changes / other dramatic shifts over time, as these can make it hard to understand what's from the mutations and what's part of the original, or just compare specimens (in thumbnails and otherwise)
+- No dramatic scene transitions / camera changes / other dramatic shifts over time, as these can make it hard to understand what's from the mutations and what's part of the original, or compare specimens in general; this is not a dealbreaker tho. (It could help for comparison to reset time to 0 or some point for the screenshots.)
 - Fast, because it's not so fun when your computer is lagging 😛
 
 ## Glossary
