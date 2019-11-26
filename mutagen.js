@@ -231,6 +231,10 @@ var css = `
 	display: flex;
 	flex-basis: 150px;
 }
+#mutagen-breeding-actions {
+	display: flex;
+	flex-direction: column;
+}
 #mutagen-breeding-box {
 	flex: 1;
 	border: 4px dashed gray;
@@ -286,6 +290,8 @@ var toolbar = document.createElement("div");
 toolbar.id = "mutagen-toolbar";
 var breeding_bar = document.createElement("div");
 breeding_bar.id = "mutagen-breeding-bar";
+var breeding_actions = document.createElement("div");
+breeding_actions.id = "mutagen-breeding-actions";
 var breeding_thumbnails_container = document.createElement("div");
 breeding_thumbnails_container.id = "mutagen-breeding-box";
 breeding_thumbnails_container.className = "mutagen-thumbnails-list";
@@ -293,6 +299,7 @@ var thumbnails_container = document.createElement("div");
 thumbnails_container.id = "mutagen-thumbnails-container";
 thumbnails_container.className = "mutagen-thumbnails-list";
 breeding_bar.appendChild(breeding_thumbnails_container);
+breeding_bar.appendChild(breeding_actions);
 ui_container.appendChild(toolbar);
 ui_container.appendChild(breeding_bar);
 ui_container.appendChild(thumbnails_container);
@@ -1049,6 +1056,12 @@ breed_button.onclick = ()=> {
 	breed(selected_docs, selected_docs.map(()=> 1));
 };
 
+var clear_breeding_box_button = document.createElement("button");
+clear_breeding_box_button.textContent = "Clear";
+clear_breeding_box_button.onclick = ()=> {
+	breeding_thumbnails_container.innerHTML = "";
+};
+
 var export_button = document.createElement("button");
 export_button.textContent = "Export Code & Thumbnails";
 export_button.onclick = export_thumbnails;
@@ -1097,7 +1110,8 @@ toolbar.appendChild(mutate_button);
 toolbar.appendChild(abort_button);
 toolbar.appendChild(export_button);
 toolbar.appendChild(export_results);
-breeding_bar.appendChild(breed_button);
+breeding_actions.appendChild(breed_button);
+breeding_actions.appendChild(clear_breeding_box_button);
 
 try {
 	window.mutagen_stop();
