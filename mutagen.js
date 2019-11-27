@@ -444,6 +444,7 @@ function add_thumbnail(code, img_src) {
 	thumbnail_img.setAttribute("draggable", "draggable"); // probably not necessary since it happens to be an img
 	
 	thumbnails.push(thumbnail_img);
+	invalidate_export_links();
 }
 document.addEventListener("dragstart", (event)=> {
 	var thumbnail_img = event.target.closest(".mutagen-thumbnail");
@@ -1209,6 +1210,10 @@ export_button.textContent = "Export Code & Thumbnails";
 export_button.onclick = export_thumbnails;
 var export_results = document.createElement("div");
 export_results.className = "export-results";
+
+function invalidate_export_links(){
+	export_results.innerHTML = "";
+}
 
 function export_thumbnails(){
 	export_results.innerHTML = "";
