@@ -440,7 +440,7 @@ function make_breeding_slot() {
 	return slot;
 }
 
-for (let i=0; i<5; i++) {
+for (let i=0; i<4; i++) {
 	breeding_slots_container.appendChild(make_breeding_slot());
 }
 
