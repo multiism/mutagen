@@ -283,10 +283,12 @@ style.type = "text/css";
 style.appendChild(document.createTextNode(css));
 
 
-var thumbnails = Array.from(document.querySelectorAll(".mutagen-thumbnail"));
 var existing_thumbnails_container = document.querySelector("#mutagen-thumbnails-container"); // history palette / specimen palette
 var existing_ui_container = document.querySelector("#mutagen-ui-container"); // history palette / specimen palette
-
+var thumbnails = [];
+if (existing_thumbnails_container) {
+	thumbnails = Array.from(existing_thumbnails_container.querySelectorAll(".mutagen-thumbnail"));
+}
 if (existing_ui_container) {
 	existing_ui_container.remove();
 }
