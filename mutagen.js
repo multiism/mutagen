@@ -335,7 +335,7 @@ document.body.appendChild(ui_container);
 for (var thumbnail of thumbnails) {
 	thumbnails_container.appendChild(thumbnail);
 }
-thumbnails_container.addEventListener("click", (event)=> {
+ui_container.addEventListener("click", (event)=> {
 	if (!event.target.classList.contains("mutagen-thumbnail")) {
 		return;
 	}
