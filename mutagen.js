@@ -451,35 +451,53 @@ function add_thumbnail(code, img_src) {
 	thumbnails.push(thumbnail_img);
 }
 
+document.addEventListener("dragover", (event)=> {
+	var slot = event.target.closest(".mutagen-breeding-slot");
+	if (!slot) {
+		return;
+	}
+	event.preventDefault();
+	return false;
+});
+document.addEventListener("dragenter", (event)=> {
+	if (!dragging_el) {
+		return;
+	}
+	var slot = event.target.closest(".mutagen-breeding-slot");
+	if (!slot) {
+		return;
+	}
+	slot.classList.add("over");
+});
+document.addEventListener("dragleave", (event)=> {
+	var slot = event.target.closest(".mutagen-breeding-slot");
+	if (!slot) {
+		return;
+	}
+	if (event.relatedTarget.closest(".mutagen-breeding-slot") !== slot) {
+		slot.classList.remove("over");
+	}
+});
+document.addEventListener("drop", (event)=> {
+	var slot = event.target.closest(".mutagen-breeding-slot");
+	if (!slot) {
+		return;
+	}
+	event.stopPropagation();
+	if (!dragging_el) {
+		return;
+	}
+	slot.innerHTML = "";
+	var thumbnail_clone = dragging_el.cloneNode();
+	slot.appendChild(thumbnail_clone);
+
+	return false;
+});
+
+
 function make_breeding_slot() {
 	var slot = document.createElement("div");
 	slot.className = "mutagen-breeding-slot";
-	slot.addEventListener("dragover", (event)=> {
-		event.preventDefault();
-		return false;
-	});
-	slot.addEventListener("dragenter", (event)=> {
-		if (!dragging_el) {
-			return;
-		}
-		slot.classList.add("over");
-	});
-	slot.addEventListener("dragleave", (event)=> {
-		if (event.relatedTarget.closest(".mutagen-breeding-slot") !== slot) {
-			slot.classList.remove("over");
-		}
-	});
-	slot.addEventListener("drop", (event)=> {
-		event.stopPropagation();
-		if (!dragging_el) {
-			return;
-		}
-		slot.innerHTML = "";
-		var thumbnail_clone = dragging_el.cloneNode();
-		slot.appendChild(thumbnail_clone);
-
-		return false;
-	});
 	return slot;
 }
 
