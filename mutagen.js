@@ -395,6 +395,8 @@ function record_thumbnail() {
 		});
 		dragging_el = null; // (drop comes before dragend)
 	});
+
+	thumbnails.push(thumbnail_img);
 }
 
 function make_breeding_slot() {
@@ -1109,7 +1111,6 @@ export_results.className = "export-results";
 function export_thumbnails(){
 	export_results.innerHTML = "";
 
-	var thumbnails = Array.from(document.querySelectorAll(".mutagen-thumbnail"));
 	var all_code = thumbnails.map((thumbnail)=> thumbnail.dataset.code).join("\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 	var all_code_blob = new Blob([all_code], {type: 'text/plain'});
 	
