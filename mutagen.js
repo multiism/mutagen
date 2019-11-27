@@ -430,7 +430,7 @@ function add_thumbnail(code, img_src) {
 	thumbnail_img.height = thumbnail_canvas.height;
 	thumbnail_img.dataset.code = code;
 	thumbnail_img.tabIndex = 0;
-	thumbnail_img.setAttribute("role", "button");
+	// thumbnail_img.setAttribute("role", "button");
 	thumbnails_container.appendChild(thumbnail_img);
 	thumbnail_img.setAttribute("draggable", "draggable"); // probably not necessary since it happens to be an img
 	
