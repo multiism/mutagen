@@ -220,6 +220,15 @@ var css = `
 #mutagen-ui-container:focus-within {
 	transform: scale(1);
 }*/
+#mutagen-toolbar {
+	display: flex;
+	height: 50px;
+	align-items: center;
+}
+#mutagen-toolbar button {
+	height: 30px;
+	margin-left: 15px;
+}
 .mutagen-thumbnails-list {
 	display: grid;
 	overflow: auto;
