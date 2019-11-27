@@ -315,11 +315,11 @@ var css = `
 	transition: transform 0.2s ease, opacity 0.2s ease;
 }
 .mutagen-breeding-slot.over {
-	border-color: #fff;
+	border-color: #aaa;
 }
 .mutagen-breeding-slot.over::before {
 	transform: translate(-50%, -50%) scale(0.7);
-	opacity: 1;
+	opacity: 0.5;
 }
 .mutagen-breeding-slot .mutagen-thumbnail {
 	z-index: 1;
