@@ -196,6 +196,7 @@ var existing_style = document.querySelector("#mutagen-style");
 if (existing_style) {
 	existing_style.remove();
 }
+var num_breeding_slots = 4;
 var css = `
 #mutagen-ui-container {
 	font-size: 15px;
@@ -229,6 +230,9 @@ var css = `
 	padding-top: 15px;
 	padding-bottom: 15px; /* doesn't seem to work - could use margin instead tho if there's an outer container */
 }
+#mutagen-breeding-box {
+	grid-template-columns: repeat(4, var(--thumbnail-width));
+}
 #mutagen-breeding-bar {
 	display: flex;
 }
@@ -259,10 +263,25 @@ var css = `
 		--thumbnail-height: ${thumbnail_canvas.height * 0.8}px;
 	}
 }
-@media (max-width: 600px) {
+@media (max-width: 800px) {
+	#mutagen-ui-container {
+		--thumbnail-width: ${thumbnail_canvas.width * 0.7}px;
+		--thumbnail-height: ${thumbnail_canvas.height * 0.7}px;
+	}
+}
+@media (max-width: 700px) {
 	#mutagen-ui-container {
 		--thumbnail-width: ${thumbnail_canvas.width * 0.6}px;
 		--thumbnail-height: ${thumbnail_canvas.height * 0.6}px;
+	}
+}
+@media (max-width: 600px) {
+	/*#mutagen-ui-container {
+		--thumbnail-width: ${thumbnail_canvas.width * 0.5}px;
+		--thumbnail-height: ${thumbnail_canvas.height * 0.5}px;
+	}*/
+	#mutagen-breeding-box {
+		grid-template-columns: repeat(2, var(--thumbnail-width));
 	}
 }
 .mutagen-breeding-slot::before {
@@ -457,8 +476,11 @@ function make_breeding_slot() {
 	return slot;
 }
 
-for (let i=0; i<4; i++) {
-	breeding_slots_container.appendChild(make_breeding_slot());
+var breeding_slots = [];
+for (let i=0; i<num_breeding_slots; i++) {
+	let slot = make_breeding_slot();
+	breeding_slots_container.appendChild(slot);
+	breeding_slots.push(slot);
 }
 
 function is_output_canvas_interesting() {
