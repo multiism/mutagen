@@ -212,6 +212,8 @@ var css = `
 	/* transform: scale(0.2); */
 	transform-origin: bottom right;
 	transition: transform .2s ease;
+	--thumbnail-width: ${thumbnail_canvas.width}px;
+	--thumbnail-height: ${thumbnail_canvas.height}px;
 }
 #mutagen-ui-container:hover,
 #mutagen-ui-container:focus-within {
@@ -220,7 +222,7 @@ var css = `
 .mutagen-thumbnails-list {
 	display: grid;
 	overflow: auto;
-	grid-template-columns: repeat(auto-fill, ${thumbnail_canvas.width}px);
+	grid-template-columns: repeat(auto-fill, var(--thumbnail-width));
 	grid-gap: 10px;
 	justify-content: center;
 	align-content: flex-start;
@@ -237,9 +239,12 @@ var css = `
 #mutagen-breeding-box {
 	flex: 1;
 }
+.mutagen-breeding-slot,
+.mutagen-thumbnail {
+	width: var(--thumbnail-width);
+	height: var(--thumbnail-height);
+}
 .mutagen-breeding-slot {
-	width: ${thumbnail_canvas.width}px;
-	height: ${thumbnail_canvas.height}px;
 	border: 4px dashed gray;
 	border-radius: 15px;
 	background: rgba(50, 50, 50, 0.9);
@@ -249,23 +254,15 @@ var css = `
 	position: relative;
 }
 @media (max-width: 1000px) {
-	.mutagen-thumbnails-list {
-		grid-template-columns: repeat(auto-fill, ${thumbnail_canvas.width * 0.8}px);
-	}
-	.mutagen-breeding-slot,
-	.mutagen-thumbnail {
-		width: ${thumbnail_canvas.width * 0.8}px;
-		height: ${thumbnail_canvas.height * 0.8}px;
+	#mutagen-ui-container {
+		--thumbnail-width: ${thumbnail_canvas.width * 0.8}px;
+		--thumbnail-height: ${thumbnail_canvas.height * 0.8}px;
 	}
 }
 @media (max-width: 600px) {
-	.mutagen-thumbnails-list {
-		grid-template-columns: repeat(auto-fill, ${thumbnail_canvas.width * 0.6}px);
-	}
-	.mutagen-breeding-slot,
-	.mutagen-thumbnail {
-		width: ${thumbnail_canvas.width * 0.6}px;
-		height: ${thumbnail_canvas.height * 0.6}px;
+	#mutagen-ui-container {
+		--thumbnail-width: ${thumbnail_canvas.width * 0.6}px;
+		--thumbnail-height: ${thumbnail_canvas.height * 0.6}px;
 	}
 }
 .mutagen-breeding-slot::before {
