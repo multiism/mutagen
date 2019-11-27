@@ -239,6 +239,12 @@ var css = `
 #mutagen-breeding-actions {
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
+}
+#mutagen-breeding-actions button {
+	width: 100px;
+	height: 50px;
+	margin-right: 15px;
 }
 #mutagen-breeding-box {
 	flex: 1;
@@ -256,26 +262,27 @@ var css = `
 	align-items: center;
 	justify-content: center;
 	position: relative;
+	overflow: hidden;
 }
-@media (max-width: 1000px) {
+@media (max-width: 1050px) {
 	#mutagen-ui-container {
 		--thumbnail-width: ${thumbnail_canvas.width * 0.8}px;
 		--thumbnail-height: ${thumbnail_canvas.height * 0.8}px;
 	}
 }
-@media (max-width: 800px) {
+@media (max-width: 850px) {
 	#mutagen-ui-container {
 		--thumbnail-width: ${thumbnail_canvas.width * 0.7}px;
 		--thumbnail-height: ${thumbnail_canvas.height * 0.7}px;
 	}
 }
-@media (max-width: 700px) {
+@media (max-width: 750px) {
 	#mutagen-ui-container {
 		--thumbnail-width: ${thumbnail_canvas.width * 0.6}px;
 		--thumbnail-height: ${thumbnail_canvas.height * 0.6}px;
 	}
 }
-@media (max-width: 600px) {
+@media (max-width: 650px) {
 	/*#mutagen-ui-container {
 		--thumbnail-width: ${thumbnail_canvas.width * 0.5}px;
 		--thumbnail-height: ${thumbnail_canvas.height * 0.5}px;
@@ -1134,6 +1141,7 @@ abort_button.onclick = ()=> {
 
 
 var breed_button = document.createElement("button");
+breed_button.id = "mutagen-breed-button";
 breed_button.textContent = "Breed";
 breed_button.onclick = ()=> {
 	const selected_thumbnails = Array.from(document.querySelectorAll("#mutagen-breeding-box .mutagen-thumbnail"));
@@ -1143,6 +1151,7 @@ breed_button.onclick = ()=> {
 };
 
 var clear_breeding_box_button = document.createElement("button");
+clear_breeding_box_button.id = "mutagen-clear-button";
 clear_breeding_box_button.textContent = "Clear";
 clear_breeding_box_button.onclick = ()=> {
 	Array.from(document.querySelectorAll(".mutagen-breeding-slot")).forEach((breeding_slot)=> {
