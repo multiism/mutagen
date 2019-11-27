@@ -211,7 +211,7 @@ var css = `
 	flex-direction: column;
 	background: rgba(0, 0, 0, 0.5);
 	color: white;
-	transform: scale(0.2);
+	/* transform: scale(0.2); */
 	transform-origin: bottom right;
 	transition: transform .2s ease;
 }
