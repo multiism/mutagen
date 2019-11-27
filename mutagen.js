@@ -1081,20 +1081,27 @@ async function mutate_code_on_page() {
 		window._new_code = _new_code;
 		window._new_code_from_page = _new_code_from_page;
 
-		console.assert(_new_code === _new_code_from_page, "got different code from page as should have been generated (compare _new_code vs _new_code_from_page)");
-
 		if (_new_code === _original_code) {
 			console.log(`_new_code is same as _original_code, LAME (edit set try: ${edit_set_tries+1}/${max_edit_set_tries})`);
+		} else if (_original_code === _new_code_from_page) {
+			console.log(`failed to set code on page, or it isn't updated yet at the time of testing (race condition?)`);
+			// TODO: try again? fix race condition?
+			stop();
+			return;
+		} else if (_new_code !== _new_code_from_page) {
+			console.log(`failed to set code on page to the exact code string, or there's a race condition`);
+			stop();
+			return;
 		} else {
 			console.assert(accepted_edits.length > 0);
 			console.log("mutation finished", {accepted_edits});
-			stopped = true;
+			stop();
 			return;
 		}
 	}
 	console.log("mutation unsuccessful");
-	stopped = true;
-	// TODO: reset code to original
+	stop();
+	roll_back_code();
 }
 
 // TODO: DRY
@@ -1105,7 +1112,7 @@ async function breed(docs, weights) {
 
 	var base_doc = docs[0];
 	if (!base_doc) {
-		console.log("Nothing to breed");
+		alert("Nothing to breed. Drag some thumbnails to the breeding slots.");
 		return;
 	}
 	// TODO: check that document_structures_are_equivalent
@@ -1147,7 +1154,7 @@ async function breed(docs, weights) {
 		var error = await try_edits(base_doc, edits_to_try);
 		// console.log("tried", edits_to_try, "got", error);
 		if (!error) {
-			stopped = true;
+			stop();
 			console.log("breeding success");
 			record_thumbnail();
 			return;
@@ -1158,7 +1165,7 @@ async function breed(docs, weights) {
 	}
 	console.log("breeding unsuccessful");
 	alert("breeding unsuccessful");
-	stopped = true;
+	stop();
 	// TODO: reset code to original
 }
 
@@ -1175,6 +1182,7 @@ abort_button.textContent = "ABORT";
 abort_button.onclick = ()=> {
 	window.mutagen_stop();
 };
+abort_button.disabled = true;
 
 
 var breed_button = document.createElement("button");
@@ -1254,8 +1262,6 @@ record_thumbnail();
 
 /*
 FIXME: canvas snapshotted and/or tested for blankness before the shader is loaded and rendered
-
-FIXME: Assertion failed: got different code from page as should have been generated
 
 TODO: improve handling of shadertoy tabs:
 	protect against switching tabs while mutations are being made
