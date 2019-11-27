@@ -440,16 +440,16 @@ function add_thumbnail(code, img_src) {
 		thumbnail_img.classList.add("dragging");
 		dragging_el = thumbnail_img;
 	});
-	document.addEventListener("dragend", (event)=> {
-		Array.from(document.querySelectorAll(".mutagen-breeding-slot, .mutagen-thumbnail")).forEach((el)=> {
-			el.classList.remove("over");
-			el.classList.remove("dragging");
-		});
-		dragging_el = null; // (drop comes before dragend)
-	});
 
 	thumbnails.push(thumbnail_img);
 }
+document.addEventListener("dragend", (event)=> {
+	Array.from(document.querySelectorAll(".mutagen-breeding-slot, .mutagen-thumbnail")).forEach((el)=> {
+		el.classList.remove("over");
+		el.classList.remove("dragging");
+	});
+	dragging_el = null; // (drop comes before dragend)
+});
 
 document.addEventListener("dragover", (event)=> {
 	var slot = event.target.closest(".mutagen-breeding-slot");
