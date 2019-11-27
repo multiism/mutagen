@@ -306,12 +306,7 @@ style.appendChild(document.createTextNode(css));
 var existing_thumbnails_container = document.querySelector("#mutagen-thumbnails-container"); // history palette / specimen palette
 var existing_ui_container = document.querySelector("#mutagen-ui-container"); // history palette / specimen palette
 var thumbnails = [];
-if (existing_thumbnails_container) {
-	thumbnails = Array.from(existing_thumbnails_container.querySelectorAll(".mutagen-thumbnail"));
-}
-if (existing_ui_container) {
-	existing_ui_container.remove();
-}
+
 var ui_container = document.createElement("div");
 ui_container.id = "mutagen-ui-container";
 var toolbar = document.createElement("div");
@@ -332,9 +327,16 @@ ui_container.appendChild(toolbar);
 ui_container.appendChild(breeding_bar);
 ui_container.appendChild(thumbnails_container);
 document.body.appendChild(ui_container);
-for (var thumbnail of thumbnails) {
-	thumbnails_container.appendChild(thumbnail);
+
+if (existing_thumbnails_container) {
+	Array.from(existing_thumbnails_container.querySelectorAll(".mutagen-thumbnail")).forEach((thumbnail_img)=> {
+		add_thumbnail(thumbnail_img.dataset.code, thumbnail_img.src);
+	});
 }
+if (existing_ui_container) {
+	existing_ui_container.remove();
+}
+
 ui_container.addEventListener("click", (event)=> {
 	if (!event.target.classList.contains("mutagen-thumbnail")) {
 		return;
@@ -368,12 +370,19 @@ function record_thumbnail() {
 	if (thumbnails.some((el)=> el.dataset.code === code)) {
 		return;
 	}
+	add_thumbnail(code);
+}
 
+function add_thumbnail(code, img_src) {
 	var thumbnail_img = document.createElement("img");
 	thumbnail_img.className = "mutagen-thumbnail";
-	thumbnail_ctx.clearRect(0, 0, thumbnail_canvas.width, thumbnail_canvas.height);
-	thumbnail_ctx.drawImage(output_canvas, 0, 0, thumbnail_canvas.width, thumbnail_canvas.height);
-	thumbnail_img.src = thumbnail_canvas.toDataURL();
+	if (img_src) {
+		thumbnail_img.src = img_src
+	} else {
+		thumbnail_ctx.clearRect(0, 0, thumbnail_canvas.width, thumbnail_canvas.height);
+		thumbnail_ctx.drawImage(output_canvas, 0, 0, thumbnail_canvas.width, thumbnail_canvas.height);
+		thumbnail_img.src = thumbnail_canvas.toDataURL();
+	}
 	thumbnail_img.width = thumbnail_canvas.width;
 	thumbnail_img.height = thumbnail_canvas.height;
 	thumbnail_img.dataset.code = code;
