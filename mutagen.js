@@ -273,7 +273,7 @@ var css = `
 	z-index: 1;
 }
 .mutagen-breeding-slot.over .mutagen-thumbnail {
-	opacity: 0.3;
+	opacity: 0;
 }
 #mutagen-thumbnails-container {
 	flex: 1;
