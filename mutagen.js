@@ -216,10 +216,10 @@ var css = `
 	--thumbnail-width: ${thumbnail_canvas.width}px;
 	--thumbnail-height: ${thumbnail_canvas.height}px;
 }
-#mutagen-ui-container:hover,
+/*#mutagen-ui-container:hover,
 #mutagen-ui-container:focus-within {
 	transform: scale(1);
-}
+}*/
 .mutagen-thumbnails-list {
 	display: grid;
 	overflow: auto;
