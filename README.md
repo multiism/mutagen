@@ -45,3 +45,5 @@ This codebase needs a bit of a glossary, especially since "edit" and "edit point
 ## License
 
 MIT-licensed, see [LICENSE](LICENSE)
+
+[DNA icon by Kenton Quatman](https://thenounproject.com/term/dna/12357/) from the Noun Project
