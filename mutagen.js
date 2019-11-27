@@ -310,7 +310,7 @@ var css = `
 }
 .mutagen-breeding-slot.over::before {
 	transform: translate(-50%, -50%) scale(0.7);
-	opacity: 0.4;
+	opacity: 1;
 }
 .mutagen-breeding-slot .mutagen-thumbnail {
 	z-index: 1;
