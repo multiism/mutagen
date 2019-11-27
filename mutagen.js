@@ -479,6 +479,11 @@ document.addEventListener("dragleave", (event)=> {
 	if (!slot) {
 		return;
 	}
+	if (!event.relatedTarget) {
+		// ...not sure what to do here, not sure when this happens
+		console.log("no event.relatedTarget during dragleave", event);
+		return;
+	}
 	if (event.relatedTarget.closest(".mutagen-breeding-slot") !== slot) {
 		slot.classList.remove("over");
 	}
