@@ -1080,7 +1080,9 @@ breed_button.onclick = ()=> {
 var clear_breeding_box_button = document.createElement("button");
 clear_breeding_box_button.textContent = "Clear";
 clear_breeding_box_button.onclick = ()=> {
-	breeding_slots_container.innerHTML = "";
+	Array.from(document.querySelectorAll(".mutagen-breeding-slot")).forEach((breeding_slot)=> {
+		breeding_slot.innerHTML = "";
+	});
 };
 
 var export_button = document.createElement("button");
