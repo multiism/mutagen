@@ -434,15 +434,20 @@ function add_thumbnail(code, img_src) {
 	thumbnails_container.appendChild(thumbnail_img);
 	thumbnail_img.setAttribute("draggable", "draggable"); // probably not necessary since it happens to be an img
 	
-	thumbnail_img.addEventListener("dragstart", (event)=> {
-		event.dataTransfer.dropEffect = "copy";
-		event.dataTransfer.setData('text/plain', thumbnail_img.dataset.code);
-		thumbnail_img.classList.add("dragging");
-		dragging_el = thumbnail_img;
-	});
-
 	thumbnails.push(thumbnail_img);
 }
+document.addEventListener("dragstart", (event)=> {
+	var thumbnail_img = event.target.closest(".mutagen-thumbnail");
+	// var slot = event.target.closest(".mutagen-breeding-slot");
+	if (!thumbnail_img) {
+		return;
+	}
+	event.dataTransfer.dropEffect = "copy";
+	event.dataTransfer.setData('text/plain', thumbnail_img.dataset.code);
+	thumbnail_img.classList.add("dragging");
+	dragging_el = thumbnail_img;
+});
+
 document.addEventListener("dragend", (event)=> {
 	Array.from(document.querySelectorAll(".mutagen-breeding-slot, .mutagen-thumbnail")).forEach((el)=> {
 		el.classList.remove("over");
