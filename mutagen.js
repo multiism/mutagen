@@ -411,10 +411,9 @@ function make_breeding_slot() {
 		slot.classList.add("over");
 	});
 	slot.addEventListener("dragleave", (event)=> {
-		if (event.target !== slot) {
-			return;
+		if (event.relatedTarget.closest(".mutagen-breeding-slot") !== slot) {
+			slot.classList.remove("over");
 		}
-		slot.classList.remove("over");
 	});
 	slot.addEventListener("drop", (event)=> {
 		event.stopPropagation();
