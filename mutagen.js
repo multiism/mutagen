@@ -86,13 +86,13 @@ function mutate_number_literal(num_str, mutation_chance) {
 			return `${Math.ceil(n)}`;
 		}
 		return `${n}`;
-	}
+	};
 
 	if (Math.random() < mutation_chance) { n += 1; }
 	if (Math.random() < mutation_chance) { n -= 1; }
 	if (Math.random() < mutation_chance) { n /= 2; }
 	if (Math.random() < mutation_chance) { n *= 2; }
-	if (isNaN(n)) {
+	if (!isFinite(n)) {
 		console.warn(`somehow got ${n} from ${JSON.stringify(num_str)}`);
 		return num_str;
 	} else if (n < 0 && original_n >= 0) {
