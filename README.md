@@ -1,5 +1,7 @@
 # ☢ MUTAGEN ☢
 
+![radioactive clover](images/radioactive-clover-screenshot.png)
+
 There's an incredible breadth of art people have created on websites like [Shadertoy](https://www.shadertoy.com/browse).
 
 You never had to be a programmer to mess around with any of these, just fiddling with random numbers, but doing that manually is tedious. *We can automate this.*
@@ -14,6 +16,8 @@ It captures thumbnails of the output, and you can:
 - Drag thumbnails into the breeding box and click Breed to make mixes of the mutations, manifesting as more thumbnails
 
 Mutagen lets you **create novel works of art by remixing procedural art thru a visual interface.**
+
+![some thumbnails from mutating an Octopus](images/some-thumbnails-from-octopus.png)
 
 <!-- https://en.wikipedia.org/wiki/Selective_breeding -->
 
