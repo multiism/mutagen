@@ -1,0 +1,30 @@
+{
+	"manifest_version": 2,
+	"name": "Mutagen",
+	"description": "Evolve visual programs genetically with drag and drop.",
+	"version": "0.1",
+	"homepage_url": "https://github.com/multiism/mutagen",
+	"icons": {
+		"512": "images/mutagen-icon-512.png",
+		"96": "images/mutagen-icon-96.png",
+		"48": "images/mutagen-icon-48.png"
+	},
+	"background": {
+		"scripts": [
+			"background.js"
+		]
+	},
+	"permissions": [
+		"activeTab"
+	],
+	"page_action": {
+		"default_icon": "images/mutagen-icon.svg",
+		"default_title": "Mutagen",
+		"show_matches": [
+			"https://*.shadertoy.com/*"
+		],
+		"hide_matches": [
+			"https://*.shadertoy.com/profile*"
+		]
+	}
+}
