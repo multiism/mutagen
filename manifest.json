@@ -15,10 +15,19 @@
 		]
 	},
 	"permissions": [
-		"activeTab"
+		"tabs",
+		"*://*/*",
+		"declarativeContent"
+	],
+	"web_accessible_resources": [
+		"mutagen.js"
 	],
 	"page_action": {
-		"default_icon": "images/mutagen-icon.svg",
+		"default_icon": {
+			"512": "images/mutagen-icon-512.png",
+			"96": "images/mutagen-icon-96.png",
+			"48": "images/mutagen-icon-48.png"
+		},
 		"default_title": "Mutagen",
 		"show_matches": [
 			"https://*.shadertoy.com/*"
