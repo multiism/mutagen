@@ -234,7 +234,7 @@ var css = `
 	bottom: 0;
 	width: 100%;
 	height: 50%;
-	z-index: 10;
+	z-index: 1000;
 	display: flex;
 	flex-direction: column;
 	background: rgba(0, 0, 0, 0.5);
@@ -631,7 +631,7 @@ function is_compiling() {
 }
 function compile_code_on_page() {
 	
-	var compile_button = document.querySelector("[title~='Compile'], #applyButton"); // shadertoy, shaderoo
+	var compile_button = document.querySelector("[title~='Compile'], #applyButton, #run"); // shadertoy, shaderoo, jsfiddle
 	if (compile_button) {
 		compile_button.click(); 
 	} else if (window.compile) {
@@ -952,7 +952,7 @@ var attribution_header_end = `code mutation tool by Isaiah Odhner)`;
 
 function get_attribution_header() {
 	// TODO: handle shaders being edited (don't say "Based on" I suppose? get name title from input)
-	var title_el = document.querySelector("#shaderTitle, title");
+	var title_el = document.querySelector("#shaderTitle, [name='title'], #title, title");
 	var author_name_el = document.querySelector("#shaderAuthorName");
 	var author_date_el = document.querySelector("#shaderAuthorDate");
 	var title = title_el && title_el.textContent;
