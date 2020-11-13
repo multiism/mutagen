@@ -196,6 +196,20 @@ function find_problem_in_output_on_page() {
 	if (document.querySelector(".tab.errorYes")) {
 		return new Error("compile failed (in some tab)");
 	}
+	// shaderoo
+	var ace_el = document.querySelector(".ace_editor");
+	if (ace_el && window.ace && window.ace.edit) {
+		var editor = window.ace.edit(ace_el);
+		var annotations = editor.getSession().getAnnotations();
+		var errors = annotations.filter((annotation) => annotation.type === "error");
+		if (errors.length > 0) {
+			return new Error(`compile failed:\n  ${
+				errors.map(
+					(annotation) => `${annotation.row}:${annotation.column} ${annotation.text.replace(/\0/g, "")}`
+				).join("\n  ")
+			}`);
+		}
+	}
 	// bytebeat - it's not very semantic in the DOM!
 	var error_message_el = document.querySelector("#controls button[style^='color: rgb(255, 0, 0)']")
 	if (error_message_el) {
