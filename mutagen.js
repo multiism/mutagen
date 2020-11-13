@@ -1,3 +1,16 @@
+(function () {
+
+var existing_style = document.querySelector("#mutagen-style");
+var existing_thumbnails_container = document.querySelector("#mutagen-thumbnails-container"); // history palette / specimen palette
+var existing_ui_container = document.querySelector("#mutagen-ui-container"); // history palette / specimen palette
+if (existing_style) {
+	existing_style.remove();
+}
+if (existing_ui_container) {
+	existing_ui_container.remove();
+	return;
+}
+
 function parse_for_edit_points_even_in_comments(code) {
 	var doc = [];
 
@@ -192,10 +205,6 @@ if (output_canvas) {
 	thumbnail_canvas.height = thumbnail_canvas.width;
 }
 
-var existing_style = document.querySelector("#mutagen-style");
-if (existing_style) {
-	existing_style.remove();
-}
 var num_breeding_slots = 4;
 var css = `
 #mutagen-ui-container {
@@ -355,8 +364,6 @@ style.type = "text/css";
 style.appendChild(document.createTextNode(css));
 
 
-var existing_thumbnails_container = document.querySelector("#mutagen-thumbnails-container"); // history palette / specimen palette
-var existing_ui_container = document.querySelector("#mutagen-ui-container"); // history palette / specimen palette
 var thumbnails = [];
 
 var ui_container = document.createElement("div");
@@ -1333,3 +1340,5 @@ correlate and reconcile semi-related programs for breeding? / haphazardly mash t
 	and idk how this would work
 
 */
+
+})();
