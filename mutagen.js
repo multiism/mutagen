@@ -952,9 +952,9 @@ var attribution_header_end = `code mutation tool by Isaiah Odhner)`;
 
 function get_attribution_header() {
 	// TODO: handle shaders being edited (don't say "Based on" I suppose? get name title from input)
-	var title_el = document.querySelector("#shaderTitle, [name='title'], #title, title");
-	var author_name_el = document.querySelector("#shaderAuthorName");
-	var author_date_el = document.querySelector("#shaderAuthorDate");
+	var title_el = document.querySelector("#shaderTitle, #shaderName, [name='title'], #title, title"); // shadertoy, shaderoo, jsfiddle, (speculative), (fallback to page title)
+	var author_name_el = document.querySelector("#shaderAuthorName, a[href*='username=']"); // shadertoy, shaderoo
+	var author_date_el = document.querySelector("#shaderAuthorDate"); // shadertoy
 	var title = title_el && title_el.textContent;
 	var author_name = author_name_el && author_name_el.textContent;
 	var author_date = author_date_el && author_date_el.textContent;
