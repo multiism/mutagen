@@ -32,14 +32,16 @@ Mutagen lets you **create novel works of art by remixing procedural art thru a v
   - It will open a window with the extension temporarily installed.
   - When you make changes:
     - It will automatically reload the extension.
-    - You'll need to reload pages you're testing on to get the updated content script.
+    - You'll need to toggle Mutagen off and on to inject the updated content script.
+    - You *may* need to refresh the page if debugging, to avoid outdated source code in the debugger.
 - For **Chrome** or **Chromium**:
   - Type `chrome://extensions` in the address bar
   - Turn on Developer mode
   - Click "Load unpacked" and select the root of this repository as the folder
   - When you make changes:
     - Click the Reload button in the Extensions page
-    - Then reload pages you're testing on to get the updated content script.
+    - Toggle Mutagen off and on to inject the updated content script.
+- You may also need to refresh the page (rather than just toggle the extension off and on) if things aren't cleaned up properly, e.g. while working some something that needs new cleanup, like a `setInterval`.
 
 ## Usage
 - Open up Shadertoy - try ["Clover"](https://www.shadertoy.com/view/XsXGzn), that's a good one (especially if you've played [Five Leaf Clover](https://www.kongregate.com/games/moczan/ultimate-five-leaf-clover) first)
