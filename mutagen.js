@@ -1323,6 +1323,15 @@ https://github.com/multiism/mutagen
 
 	record_thumbnail();
 
+	var shadertoy_tabs = document.querySelectorAll("#editorWrapper .tab");
+	if (shadertoy_tabs.length > 1) {
+		alert("Warning: This shadertoy has multiple tabs.\nMutagen only applies to the active tab, and will get confused if you switch tabs.\nIf you want to use a different tab, toggle Mutagen off, switch tabs, and toggle it on again.");
+	}
+	var code_editors = document.querySelectorAll(".CodeMirror, .ace_editor");
+	if (code_editors.length > 1) {
+		alert("Warning: This page contains multiple code editors / panes.\nMutagen only applies to one editor pane.");
+	}
+
 	/*
 	FIXME: canvas snapshotted and/or tested for blankness before the shader is loaded and rendered
 	
