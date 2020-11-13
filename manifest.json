@@ -30,7 +30,8 @@
 		},
 		"default_title": "Mutagen",
 		"show_matches": [
-			"https://*.shadertoy.com/*"
+			"https://*.shadertoy.com/*",
+			"https://*.shaderoo.org/*"
 		],
 		"hide_matches": [
 			"https://*.shadertoy.com/profile*"

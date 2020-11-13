@@ -17,7 +17,7 @@ if (typeof browser !== "undefined" && browser.pageAction) {
 			chrome.declarativeContent.onPageChanged.addRules([{
 				conditions: [
 					new chrome.declarativeContent.PageStateMatcher({
-						css: ["textarea"]
+						css: [".CodeMirror, .ace_editor, textarea"]
 					})
 				],
 				actions: [new chrome.declarativeContent.ShowPageAction()]

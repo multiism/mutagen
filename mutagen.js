@@ -144,6 +144,11 @@ function get_code_from_page() {
 		var cm = cm_el.CodeMirror;
 		return cm.getValue();
 	}
+	var ace_el = document.querySelector('.ace_editor');
+	if (ace_el && window.ace && window.ace.edit) {
+		var editor = window.ace.edit(ace_el);
+		return editor.getValue();
+	}
 	var textarea = document.querySelector("textarea#code, textarea"); // bytebeat, and potentially weird random things on the web
 	if (textarea) {	
 		return textarea.value;
@@ -157,6 +162,12 @@ function set_code_on_page(new_code) {
 	if (cm_el) {
 		var cm = cm_el.CodeMirror;
 		cm.setValue(new_code);
+		return;
+	}
+	var ace_el = document.querySelector('.ace_editor');
+	if (ace_el && window.ace && window.ace.edit) {
+		var editor = window.ace.edit(ace_el);
+		editor.setValue(new_code);
 		return;
 	}
 	var textarea = document.querySelector("textarea#code, textarea"); // bytebeat, and potentially weird random things on the web
@@ -198,7 +209,7 @@ function find_problem_in_output_on_page() {
 	}
 }
 
-var output_canvas = document.querySelector("canvas#demogl, canvas.playerCanvas, #player canvas, #content canvas, canvas");
+var output_canvas = document.querySelector("canvas#demogl, canvas#glcanvas, canvas.playerCanvas, #player canvas, #content canvas, canvas");
 
 var test_canvas = document.createElement("canvas");
 var test_ctx = test_canvas.getContext("2d");
@@ -448,6 +459,9 @@ function add_thumbnail(code, img_src) {
 		thumbnail_img.src = img_src
 	} else {
 		thumbnail_ctx.clearRect(0, 0, thumbnail_canvas.width, thumbnail_canvas.height);
+		if (window.draw) {
+			window.draw(); // shaderoo (webgl context without preserveDrawingBuffer needs to be rerendered to get image data from it)
+		}
 		thumbnail_ctx.drawImage(output_canvas, 0, 0, thumbnail_canvas.width, thumbnail_canvas.height);
 		thumbnail_img.src = thumbnail_canvas.toDataURL();
 	}
@@ -545,11 +559,43 @@ for (let i=0; i<num_breeding_slots; i++) {
 }
 
 function is_output_canvas_interesting() {
+	if (!output_canvas) {
+		return true;
+	}
+
+	if (window.draw) {
+		window.draw(); // shaderoo (webgl context without preserveDrawingBuffer needs to be rerendered to get image data from it)
+	}
+
 	test_ctx.clearRect(0, 0, test_canvas.width, test_canvas.height);
 	test_ctx.drawImage(output_canvas, 0, 0, test_canvas.width, test_canvas.height);
 
 	var image_data = test_ctx.getImageData(0, 0, test_canvas.width, test_canvas.height);
 	var {data} = image_data;
+
+	// if (data.every((datum) => datum === 0)) {
+	// 	var gl = output_canvas.getContext("webgl2");
+	// 	if (!gl) {
+	// 		gl = output_canvas.getContext("webgl");
+	// 	}
+	// 	if (!gl) {
+	// 		return false;
+	// 	}
+	// 	data = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
+	// 	gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, data);
+	// 	debugger;
+	// 	if (data.every((datum) => datum === 0)) {
+	// 		return false;
+	// 	}
+	// 	var temp_canvas = document.createElement("canvas");
+	// 	var temp_ctx = temp_canvas.getContext("2d");
+	// 	temp_canvas.width = gl.drawingBufferWidth;
+	// 	temp_canvas.height = gl.drawingBufferHeight;
+	// 	temp_ctx.putImageData(new ImageData(data, temp_canvas.width));
+	// 	test_ctx.drawImage(temp_canvas, 0, 0, test_canvas.width, test_canvas.height);
+	// 	image_data = test_ctx.getImageData(0, 0, test_canvas.width, test_canvas.height);
+	// 	data = image_data.data;
+	// }
 
 	// TODO: test for maybe 40% of any of four sides being blank
 	// and actually give a scalar fitness rating
@@ -585,7 +631,7 @@ function is_compiling() {
 }
 function compile_code_on_page() {
 	
-	var compile_button = document.querySelector("[title~='Compile']"); // shadertoy
+	var compile_button = document.querySelector("[title~='Compile'], #applyButton"); // shadertoy, shaderoo
 	if (compile_button) {
 		compile_button.click(); 
 	} else if (window.compile) {
@@ -1245,6 +1291,10 @@ function export_thumbnails(){
 	a.textContent = "download combined code";
 	export_results.appendChild(a);
 	
+	if (thumbnails.length === 0) {
+		return;
+	}
+
 	var thumbs_per_row = 5;
 	var canvas = document.createElement("canvas");
 	var ctx = canvas.getContext("2d");
@@ -1325,7 +1375,6 @@ platform support
 	support bytebeat again on windows93.net (in iframe)
 	khan academy, including "error buddy" detection
 	code fiddles like jsfiddle, codepen, jsbin, fiddle salad
-	shaderoo.org (ace editor)
 	see "Shadertoy cousins" on https://shadertoyunofficial.wordpress.com/2017/07/25/extending-shadertoy/
 
 wrap values sometimes in a function, like i did for:
