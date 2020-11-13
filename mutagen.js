@@ -1,5 +1,14 @@
 (function () {
 
+if (window.mutagen_stop) {
+	try {
+		window.mutagen_stop();
+	} catch (error) {
+		console.log(error);
+		alert("Failed to stop mutagen! It's out of control!");
+	}
+}
+
 var existing_style = document.querySelector("#mutagen-style");
 var existing_thumbnails_container = document.querySelector("#mutagen-thumbnails-container"); // history palette / specimen palette
 var existing_ui_container = document.querySelector("#mutagen-ui-container"); // history palette / specimen palette
