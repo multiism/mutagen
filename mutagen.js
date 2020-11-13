@@ -201,13 +201,12 @@ function find_problem_in_output_on_page() {
 	if (ace_el && window.ace && window.ace.edit) {
 		var editor = window.ace.edit(ace_el);
 		var annotations = editor.getSession().getAnnotations();
-		var errors = annotations.filter((annotation) => annotation.type === "error");
-		if (errors.length > 0) {
-			return new Error(`compile failed:\n  ${
-				errors.map(
-					(annotation) => `${annotation.row}:${annotation.column} ${annotation.text.replace(/\0/g, "")}`
-				).join("\n  ")
-			}`);
+		var error_annotations = annotations.filter((annotation) => annotation.type === "error");
+		if (error_annotations.length > 0) {
+			var indent = "    ";
+			return new Error(`compile failed:\n${indent}${error_annotations.map(
+				(annotation) => `${annotation.row}:${annotation.column} ${annotation.text.replace(/\n/g, `\n${indent}`).replace(/\0/g, "")}`
+			).join(`\n${indent}`)}`);
 		}
 	}
 	// bytebeat - it's not very semantic in the DOM!
@@ -215,9 +214,9 @@ function find_problem_in_output_on_page() {
 	if (error_message_el) {
 		return new Error(`compile failed: ${error_message_el.textContent}`);
 	}
-	// TODO: maybe testing the canvas for whether it's blank (after rendering a frame) is be expensive enough
+	// TODO: maybe testing the canvas for whether it's blank (after rendering a frame) is expensive enough
 	// that it should first do a pass just checking that it compiles, and check *at the end* if it's blank,
-	// and if it's blank then start over but checking also for blankness every time
+	// and if it's blank then start over but checking also for blankness every time (or bisecting on blankness/boringness)
 	if (!is_output_canvas_interesting()) {
 		return new Error("output looks boring / blank");
 	}
@@ -586,30 +585,6 @@ function is_output_canvas_interesting() {
 
 	var image_data = test_ctx.getImageData(0, 0, test_canvas.width, test_canvas.height);
 	var {data} = image_data;
-
-	// if (data.every((datum) => datum === 0)) {
-	// 	var gl = output_canvas.getContext("webgl2");
-	// 	if (!gl) {
-	// 		gl = output_canvas.getContext("webgl");
-	// 	}
-	// 	if (!gl) {
-	// 		return false;
-	// 	}
-	// 	data = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
-	// 	gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, data);
-	// 	debugger;
-	// 	if (data.every((datum) => datum === 0)) {
-	// 		return false;
-	// 	}
-	// 	var temp_canvas = document.createElement("canvas");
-	// 	var temp_ctx = temp_canvas.getContext("2d");
-	// 	temp_canvas.width = gl.drawingBufferWidth;
-	// 	temp_canvas.height = gl.drawingBufferHeight;
-	// 	temp_ctx.putImageData(new ImageData(data, temp_canvas.width));
-	// 	test_ctx.drawImage(temp_canvas, 0, 0, test_canvas.width, test_canvas.height);
-	// 	image_data = test_ctx.getImageData(0, 0, test_canvas.width, test_canvas.height);
-	// 	data = image_data.data;
-	// }
 
 	// TODO: test for maybe 40% of any of four sides being blank
 	// and actually give a scalar fitness rating
@@ -1321,6 +1296,7 @@ function export_thumbnails(){
 			(~~(i / thumbs_per_row)) * thumbnails[0].height
 		);
 	}
+	// TODO: catch empty canvas and null blob possibilities, allow saving partial image(s)
 	canvas.toBlob((blob)=> {
 		var url = URL.createObjectURL(blob);
 		var a = document.createElement("a");

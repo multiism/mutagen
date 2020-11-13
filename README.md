@@ -39,7 +39,7 @@ Mutagen lets you **create novel works of art by remixing procedural art thru a v
   - Turn on Developer mode
   - Click "Load unpacked" and select the root of this repository as the folder
   - When you make changes:
-    - Click the Reload button in the Extensions page
+    - Click the Reload button in the Extensions page for changes other than to the content script.
     - Toggle Mutagen off and on to inject the updated content script.
 - You may also need to refresh the page (rather than just toggle the extension off and on) if things aren't cleaned up properly, e.g. while working some something that needs new cleanup, like a `setInterval`.
 
