@@ -10,8 +10,12 @@ if (window.mutagen_stop) {
 }
 
 var existing_style = document.querySelector("#mutagen-style");
-var existing_thumbnails_container = document.querySelector("#mutagen-thumbnails-container"); // history palette / specimen palette
-var existing_ui_container = document.querySelector("#mutagen-ui-container"); // history palette / specimen palette
+// var existing_thumbnails_container = document.querySelector("#mutagen-thumbnails-container"); // specimen palette
+var existing_ui_container = document.querySelector("#mutagen-ui-container");
+var existing_logo_canvas = document.getElementById("mutagen-logo-canvas-debug");
+if (existing_logo_canvas) {
+	existing_logo_canvas.remove();
+}
 if (existing_style) {
 	existing_style.remove();
 }
@@ -420,14 +424,14 @@ ui_container.appendChild(breeding_bar);
 ui_container.appendChild(thumbnails_container);
 document.body.appendChild(ui_container);
 
-if (existing_thumbnails_container) {
-	Array.from(existing_thumbnails_container.querySelectorAll(".mutagen-thumbnail")).forEach((thumbnail_img)=> {
-		add_thumbnail(thumbnail_img.dataset.code, thumbnail_img.src);
-	});
-}
-if (existing_ui_container) {
-	existing_ui_container.remove();
-}
+// if (existing_thumbnails_container) {
+// 	Array.from(existing_thumbnails_container.querySelectorAll(".mutagen-thumbnail")).forEach((thumbnail_img)=> {
+// 		add_thumbnail(thumbnail_img.dataset.code, thumbnail_img.src);
+// 	});
+// }
+// if (existing_ui_container) {
+// 	existing_ui_container.remove();
+// }
 
 ui_container.addEventListener("click", (event)=> {
 	if (!event.target.classList.contains("mutagen-thumbnail")) {
@@ -713,8 +717,6 @@ logo_canvas.width = 100;
 logo_canvas.height = 10;
 
 // for debug
-var existing_logo_canvas = document.getElementById("mutagen-logo-canvas-debug");
-if (existing_logo_canvas) { existing_logo_canvas.remove(); }
 if (window.mutagen_debug_logo) {
 	logo_canvas.id = "mutagen-logo-canvas-debug";
 	document.body.appendChild(logo_canvas);
