@@ -1,0 +1,40 @@
+{
+	"files": [
+		"**",
+		".*/**"
+	],
+	"ignorePaths": [
+		".git",
+		".history",
+		"node_modules",
+		"package-lock.json",
+		"lib/",
+		"build/",
+		"images/",
+		"*.log",
+		"npm-debug.log"
+	],
+	"words": [
+		"boringness",
+		"bytebeat",
+		"codepen",
+		"dealbreaker",
+		"demogl",
+		"glcanvas",
+		"GLSL",
+		"haha",
+		"jsbin",
+		"jsfiddle",
+		"lookbehinds",
+		"Odhner",
+		"oooh",
+		"Quatman",
+		"roundedness",
+		"Shaderoo",
+		"Shadertoy",
+		"slantedness",
+		"snapshotted",
+		"unvetted",
+		"andrewnijmeh"
+	]
+}
